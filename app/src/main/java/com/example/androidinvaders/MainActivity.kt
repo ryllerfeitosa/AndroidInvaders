@@ -1,5 +1,6 @@
 package com.example.androidinvaders
 
+import android.R.attr.text
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AndroidInvadersTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    androidInvaders(
+                    gameOver(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -107,15 +108,12 @@ fun androidInvaders(modifier: Modifier = Modifier) {
         }
 
         //Botão Inferior (Press Start)
-        pressStart(
-            gameOver(modifier: Modifier = Modifier)
-        )
+        pressStart()
     }
 }
 
 @Composable
 fun pressStart(
-        onClick: () -> Unit, //Retorna vazio o unit
         modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
@@ -151,23 +149,31 @@ fun AndroidEnemy(
 }
 
 @Composable
-fun gameOver(
-    modifier: Modifier = Modifier
-) {
+fun gameOver(modifier: Modifier = Modifier){
+    val enemyColors = listOf(Color.Green, Color.Red, Color.Blue, Color.Yellow)  //Lista de cores dos enemies
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.Black), // Tela totalmente escura
+        modifier = modifier.fillMaxSize()
+            .background(Color.Black),
         contentAlignment = Alignment.Center
-    ) {
+        ) {
+        //Inimigos
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            enemyColors.forEach { color ->   //Laco de repeticao para correr dentro da variavel e fazer o implemento da cor a cada volta
+                AndroidEnemy(
+                    color = color,
+                    modifier = Modifier.size(50.dp)
+                )
+            }
+        }
+        //Perdeu
         Text(
-            text = "GAME OVER",
-            fontSize = 40.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily.Serif,
-            color = Color.Red,
-            letterSpacing = 6.sp,
-            textAlign = TextAlign.Center
+            text = "Game over",
+            color = Color(0xFFFFFFFFF),
+            fontSize = 60.sp,
+            fontWeight = FontWeight.W700
         )
     }
 }
